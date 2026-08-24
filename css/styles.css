@@ -272,7 +272,12 @@ h1, h2, h3, h4 {
   font-size: 30px;
   color: var(--foam);
 }
-.mobile-nav .btn { margin-top: 12px; align-self: flex-start; }
+.mobile-nav .btn {
+  margin-top: 12px;
+  align-self: stretch;
+  width: 100%;
+  justify-content: center;
+}
 
 /* =========================================================
    Hero
