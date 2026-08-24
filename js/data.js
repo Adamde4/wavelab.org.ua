@@ -41,10 +41,17 @@ const PROJECTS = [
     seed: 1
   },
   {
+    title: "Кусь — техніка Apple",
+    tag: "Інтернет-магазин",
+    text: "Каталог нових і перевірених гаджетів Apple з чесним описом стану, фільтрами та кошиком.",
+    url: "https://adamde4.github.io/kus_store/",
+    seed: 2
+  },
+  {
     title: "Futurama — каркасні будинки",
     tag: "Landing Page",
     text: "Модельний ряд будинків, кошторис, етапи будівництва та форма заявки на консультацію.",
     url: "https://adamde4.github.io/futurama/",
-    seed: 2
+    seed: 3
   }
 ];
