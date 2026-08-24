@@ -142,11 +142,13 @@
 
     try {
       await sendLeadToTelegram({ name, phone, telegram, message });
-      setStatus("Дякуємо! Заявку надіслано — я звʼяжусь з вами найближчим часом.", "success");
-      form.reset();
       if (typeof window.gtag === "function") {
         window.gtag("event", "lead_form_submit");
       }
+      setStatus("Дякуємо! Заявку надіслано — перенаправляємо…", "success");
+      form.reset();
+      window.location.href = "/thanks.html";
+      return;
     } catch (err) {
       if (err && err.message === "NOT_CONFIGURED") {
         setStatus(
