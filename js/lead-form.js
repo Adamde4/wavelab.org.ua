@@ -86,6 +86,34 @@
   const escapeMd = (str) =>
     String(str).replace(/[_*[\]()~`>#+\-=|{}.!\\]/g, (m) => `\\${m}`);
 
+  /**
+   * Google Ads: конверсія "Контакт" (conversion_event_contact).
+   * Тег Google Ads використовує спільний Google tag, уже встановлений
+   * на сайті через GA4 (акаунти звʼязані) — окремий AW- тег не потрібен.
+   * Затримуємо перехід на сторінку подяки на мить, щоб браузер встиг
+   * надіслати сигнал конверсії перед навігацією (event_callback +
+   * event_timeout — рекомендований Google патерн).
+   */
+  function redirectAfterConversion(url) {
+    let navigated = false;
+    const proceed = () => {
+      if (navigated) return;
+      navigated = true;
+      window.location.href = url;
+    };
+
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "conversion_event_contact", {
+        event_callback: proceed,
+        event_timeout: 2000
+      });
+      // Фолбек: якщо gtag з якоїсь причини не викличе callback вчасно.
+      setTimeout(proceed, 2000);
+    } else {
+      proceed();
+    }
+  }
+
   async function sendLeadToTelegram({ name, phone, telegram, message }) {
     const cfg = typeof TELEGRAM_CONFIG !== "undefined" ? TELEGRAM_CONFIG : null;
     if (!cfg || !cfg.botToken || !cfg.chatId || cfg.chatId === "YOUR_CHAT_ID") {
@@ -147,7 +175,7 @@
       }
       setStatus("Дякуємо! Заявку надіслано — перенаправляємо…", "success");
       form.reset();
-      window.location.href = "/thanks.html";
+      redirectAfterConversion("/thanks.html");
       return;
     } catch (err) {
       if (err && err.message === "NOT_CONFIGURED") {
